@@ -37,7 +37,6 @@ import database.MySqlDB;
 import database.Sql;
 import mdlaf.MaterialLookAndFeel;
 import mdlaf.themes.MaterialLiteTheme;
-import mdlaf.themes.MaterialOceanicTheme;
 
 public class FrmServiceController extends JFrame {
 
@@ -64,6 +63,9 @@ public class FrmServiceController extends JFrame {
 		});
 	}
 
+	/**
+	 * loadData
+	 */
 	public void loadData() {
 		txtCode.setText("");
 		txtName.setText("");
@@ -85,10 +87,20 @@ public class FrmServiceController extends JFrame {
 		}
 	}
 
+	/**
+	 * formWindowOpened
+	 * 
+	 * @param event
+	 */
 	public void formWindowOpened(WindowEvent event) {
 		loadData();
 	}
 
+	/**
+	 * rowMouseClicked
+	 * 
+	 * @param event
+	 */
 	public void rowMouseClicked(MouseEvent event) {
 		DefaultTableModel dataModel = (DefaultTableModel) table.getModel();
 		txtCode.setText(dataModel.getValueAt(table.getSelectedRow(), 0).toString());
@@ -97,27 +109,69 @@ public class FrmServiceController extends JFrame {
 		txtPrice.setText(dataModel.getValueAt(table.getSelectedRow(), 3).toString());
 	}
 
+	/**
+	 * btnReloadClick
+	 * 
+	 * @param actionEvent
+	 */
 	public void btnReloadClick(ActionEvent actionEvent) {
 		loadData();
 	}
 
+	/**
+	 * btnAddClick
+	 * 
+	 * @param actionEvent
+	 * @throws ClassNotFoundException
+	 * @throws SQLException
+	 */
 	public void btnAddClick(ActionEvent actionEvent) throws ClassNotFoundException, SQLException {
 		Connection conn = new MySqlDB().getConnection();
 		MySqlDB.executeUpdate(conn, Sql.insertService(),
-				new String[] { txtCode.getText(), txtName.getText(), txtUnit.getText(), txtPrice.getText() });
+				new String[] {
+					txtCode.getText(),
+					txtName.getText(),
+					txtUnit.getText(),
+					txtPrice.getText()
+				});
+		conn.close();
 		loadData();
 	}
 
+	/**
+	 * btnUpdateClick
+	 * 
+	 * @param actionEvent
+	 * @throws ClassNotFoundException
+	 * @throws SQLException
+	 */
 	public void btnUpdateClick(ActionEvent actionEvent) throws ClassNotFoundException, SQLException {
 		Connection conn = new MySqlDB().getConnection();
 		MySqlDB.executeUpdate(conn, Sql.updateService(),
-				new String[] { txtName.getText(), txtUnit.getText(), txtPrice.getText(), txtCode.getText() });
+				new String[] { 
+					txtName.getText(),
+					txtUnit.getText(),
+					txtPrice.getText(),
+					txtCode.getText()
+				});
+		conn.close();
 		loadData();
 	}
 
+	/**
+	 * btnRemoveClick
+	 * 
+	 * @param actionEvent
+	 * @throws ClassNotFoundException
+	 * @throws SQLException
+	 */
 	public void btnRemoveClick(ActionEvent actionEvent) throws ClassNotFoundException, SQLException {
 		Connection conn = new MySqlDB().getConnection();
-		MySqlDB.executeUpdate(conn, Sql.deleteService(), new String[] { txtCode.getText() });
+		MySqlDB.executeUpdate(conn, Sql.deleteService(),
+				new String[] { 
+					txtCode.getText() 
+				});
+		conn.close();
 		loadData();
 	}
 
@@ -125,6 +179,7 @@ public class FrmServiceController extends JFrame {
 	 * Create the frame.
 	 */
 	public FrmServiceController() {
+		setTitle("Services");
 		addWindowListener(new WindowAdapter() {
 			@Override
 			public void windowOpened(WindowEvent arg0) {
@@ -140,7 +195,7 @@ public class FrmServiceController extends JFrame {
 			e.printStackTrace();
 		}
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(1500, 10, 800, 600);
+		setBounds(10, 10, 800, 600);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
